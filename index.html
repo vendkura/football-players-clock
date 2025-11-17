@@ -36,8 +36,10 @@
         .clock-container {
             background: white;
             border-radius: 50%;
-            width: 500px;
-            height: 500px;
+            width: 90vw;
+            max-width: 500px;
+            height: 90vw;
+            max-height: 500px;
             position: relative;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             margin: 0 auto;
@@ -147,6 +149,116 @@
             z-index: 7;
             background: #eb172b;
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .player-position {
+                width: 50px;
+                height: 50px;
+                border: 2px solid white;
+            }
+
+            .player-number {
+                font-size: 1em;
+            }
+
+            .player-name {
+                font-size: 0.65em;
+                bottom: -20px;
+                padding: 2px 6px;
+            }
+
+            .hour-hand {
+                width: 6px;
+                height: 80px;
+                margin-left: -3px;
+            }
+
+            .minute-hand {
+                width: 4px;
+                height: 110px;
+                margin-left: -2px;
+            }
+
+            .second-hand {
+                width: 2px;
+                height: 120px;
+                margin-left: -1px;
+            }
+
+            .center-dot {
+                width: 15px;
+                height: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            .player-position {
+                width: 40px;
+                height: 40px;
+            }
+
+            .player-number {
+                font-size: 0.8em;
+            }
+
+            .player-name {
+                font-size: 0.6em;
+                bottom: -18px;
+            }
+
+            .hour-hand {
+                width: 5px;
+                height: 60px;
+                margin-left: -2.5px;
+            }
+
+            .minute-hand {
+                width: 3px;
+                height: 85px;
+                margin-left: -1.5px;
+            }
+
+            .second-hand {
+                width: 2px;
+                height: 95px;
+                margin-left: -1px;
+            }
+
+            .center-dot {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1em;
+            }
+
+            .player-position {
+                width: 35px;
+                height: 35px;
+            }
+
+            .player-number {
+                font-size: 0.7em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -212,9 +324,10 @@
             },
             methods: {
                 getPositionStyle(position) {
-                    const radius = 200;
-                    const centerX = 250;
-                    const centerY = 250;
+                    const containerWidth = Math.min(window.innerWidth * 0.9, 500);
+                    const radius = containerWidth * 0.4;
+                    const centerX = containerWidth / 2;
+                    const centerY = containerWidth / 2;
                     const angle = (position * 30 - 90) * (Math.PI / 180);
                     const x = centerX + radius * Math.cos(angle);
                     const y = centerY + radius * Math.sin(angle);
@@ -239,6 +352,11 @@
             mounted() {
                 this.updateClock();
                 setInterval(this.updateClock, 1000);
+                
+                // Recalculate positions on window resize
+                window.addEventListener('resize', () => {
+                    this.$forceUpdate();
+                });
             }
         }).mount('#app');
     </script>
